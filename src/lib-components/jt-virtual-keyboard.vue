@@ -2,6 +2,7 @@
 import { defineComponent } from "vue";
 import Keyboard from "simple-keyboard";
 import "simple-keyboard/build/css/index.css";
+//import '@/style/jt-virtual-keyboard.css';
 export default /*#__PURE__*/ defineComponent({
   name: "JtVirtualKeyboard", // vue component name
   props: {
@@ -21,11 +22,11 @@ export default /*#__PURE__*/ defineComponent({
   },
   methods: {
     onChange(input) {
-      console.log('onChange', input);
+      console.log("onChange", input);
       this.$emit("onChange", input);
     },
     onKeyPress(button) {
-       console.log('onKeyPress', button);
+      console.log("onKeyPress", button);
       this.$emit("onKeyPress", button);
       if (button === "{shift}" || button === "{lock}") this.handleShift();
     },
@@ -45,17 +46,19 @@ export default /*#__PURE__*/ defineComponent({
   <div :class="keyboardClass"></div>
 </template>
 
-<style scoped>
-/* .jt-virtual-keyboard-sample {
-  display: block;
-  width: 400px;
-  margin: 25px auto;
-  border: 1px solid #ccc;
-  background: #eaeaea;
-  text-align: center;
-  padding: 25px;
+<style>
+.simple-keyboard {
+  display: none;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  z-index: 100;
 }
-.jt-virtual-keyboard-sample p {
-  margin: 0 0 1em;
-} */
+.simple-keyboard.show {
+  display: block !important;
+}
+
+.simple-keyboard.hide {
+  display: none !important;
+}
 </style>

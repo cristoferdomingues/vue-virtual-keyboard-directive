@@ -63,11 +63,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
   let simpleKeyboardDiv = document
     .createRange()
     .createContextualFragment(
-      `<div class="simple-keyboard" style="display: none"></div>`
+      `<div class="simple-keyboard jt-virtual-keyboard"></div>`
     );
   document.body.appendChild(simpleKeyboardDiv);
   keyboard = new Keyboard({
     debug: true,
+    className:'jt-virtual-keyboard',
     onChange: (input) => onChange(input),
     onKeyPress: (button) => onKeyPress(button),
   });

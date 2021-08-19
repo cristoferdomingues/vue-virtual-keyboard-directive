@@ -12,14 +12,16 @@ import { terser } from 'rollup-plugin-terser';
 import minimist from 'minimist';
 
 // Get browserslist config and remove ie from es build targets
-const esbrowserslist = fs.readFileSync('./.browserslistrc')
+const esbrowserslist = fs
+  .readFileSync('./.browserslistrc')
   .toString()
   .split('\n')
   .filter((entry) => entry && entry.substring(0, 2) !== 'ie');
 
 // Extract babel preset-env config, to combine with esbrowserslist
-const babelPresetEnvConfig = require('../babel.config')
-  .presets.filter((entry) => entry[0] === '@babel/preset-env')[0][1];
+const babelPresetEnvConfig = require('../babel.config').presets.filter(
+  (entry) => entry[0] === '@babel/preset-env'
+)[0][1];
 
 const argv = minimist(process.argv.slice(2));
 
@@ -40,8 +42,18 @@ const baseConfig = {
     ],
     replace: {
       'process.env.NODE_ENV': JSON.stringify('production'),
+      preventAssignment: true,
     },
     vue: {
+      postcssPlugins: [
+       /*  PostCSS({
+          extract: true,
+          extract: path.resolve(
+            projectRoot,
+            'src/style/jt-virtual-keyboard.css'
+          ),
+        }), */
+      ],
     },
     postVue: [
       resolve({
@@ -56,6 +68,7 @@ const baseConfig = {
       }),
       // Process all `<style>` blocks except `<style module>`.
       PostCSS({ include: /(?<!&module=.*)\.css$/ }),
+
       commonjs(),
     ],
     babel: {
@@ -72,6 +85,7 @@ const external = [
   // list external dependencies, exactly the way it is written in the import statement.
   // eg. 'jquery'
   'vue',
+  'simple-keyboard',
 ];
 
 // UMD/IIFE shared settings: output.globals

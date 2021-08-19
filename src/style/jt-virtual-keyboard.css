@@ -1,7 +1,14 @@
-.show {
+.simple-keyboard{
+  display: none;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  z-index: 100;
+}
+.simple-keyboard.show {
   display: block !important;
 }
 
-.hide {
+.simple-keyboard.hide {
   display: none !important;
 }
