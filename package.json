@@ -1,6 +1,6 @@
 {
   "name": "jt-virtual-keyboard",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "",
   "main": "dist/jt-virtual-keyboard.ssr.js",
   "browser": "dist/jt-virtual-keyboard.esm.js",
@@ -8,7 +8,9 @@
   "unpkg": "dist/jt-virtual-keyboard.min.js",
   "files": [
     "dist/*",
-    "src/**/*.vue"
+    "src/**/*.vue",
+    "src/**/*.js",
+    "src/**/*.css"
   ],
   "sideEffects": false,
   "scripts": {
