@@ -9,7 +9,17 @@ let keyboard;
 let currentVnode;
 
 const onChange = (input) => {
-  currentVnode.props['onUpdate:modelValue'](input);
+  if (currentVnode?.ref?.i?.emit) {
+    currentVnode.ref.i.emit('update:modelValue', input);
+    return;
+  }
+
+  if (
+    currentVnode.type.toLowerCase() === 'input' &&
+    currentVnode.props['onUpdate:modelValue']
+  ) {
+    currentVnode.props['onUpdate:modelValue'](input);
+  }
 };
 
 const onKeyPress = (button) => {
