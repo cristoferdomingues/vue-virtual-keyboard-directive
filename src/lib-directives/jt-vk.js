@@ -1,3 +1,4 @@
+import { ComponentInternalInstance, getCurrentInstance } from 'vue-demi';
 import Keyboard from 'simple-keyboard';
 import 'simple-keyboard/build/css/index.css';
 import '@/style/jt-virtual-keyboard.css';
@@ -5,11 +6,10 @@ import { numericLayout, englishLayout } from '@/shared/layouts';
 
 let keyboard;
 
-let currentElement;
+let currentVnode;
 
 const onChange = (input) => {
-  currentElement.value = input;
-  console.log('Input changed', input);
+  currentVnode.props['onUpdate:modelValue'](input);
 };
 
 const onKeyPress = (button) => {
@@ -59,6 +59,9 @@ const hideKeyboard = () => {
   }
 };
 
+const findInput = (el) =>
+  el.tagName === 'INPUT' ? el : el.querySelector('input');
+
 document.addEventListener('DOMContentLoaded', (event) => {
   let simpleKeyboardDiv = document
     .createRange()
@@ -68,17 +71,20 @@ document.addEventListener('DOMContentLoaded', (event) => {
   document.body.appendChild(simpleKeyboardDiv);
   keyboard = new Keyboard({
     debug: true,
-    className:'jt-virtual-keyboard',
+    className: 'jt-virtual-keyboard',
     onChange: (input) => onChange(input),
     onKeyPress: (button) => onKeyPress(button),
   });
 });
 
 const jtVkDirective = {
-  created(el, binding) {
-    el.addEventListener('focus', (event) => {
+  created(el, binding, vnode) {
+    let input = findInput(el);
+    input.addEventListener('focus', (event) => {
+      console.log('vnode', vnode);
+      console.log(binding.instance);
       toggleLayout(binding.arg);
-      currentElement = el;
+      currentVnode = vnode;
       showKeyboard();
       keyboard.setInput(event.target.value);
     });
@@ -87,7 +93,12 @@ const jtVkDirective = {
     });
   },
   beforeMount() {},
-  mounted() {},
+  mounted(el) {
+    let input = findInput(el);
+    input.addEventListener('input', (event) => {
+      binding.instance.$emit('input', input.value);
+    });
+  },
   beforeUpdate() {}, // new
   updated() {},
   beforeUnmount() {}, // new
