@@ -137,7 +137,16 @@ styleInject(css_248z);script.render = render;/* eslint-disable import/prefer-def
 var currentVnode;
 
 var _onChange = function onChange(input) {
-  currentVnode.props['onUpdate:modelValue'](input);
+  var _currentVnode, _currentVnode$ref, _currentVnode$ref$i;
+
+  if ((_currentVnode = currentVnode) !== null && _currentVnode !== void 0 && (_currentVnode$ref = _currentVnode.ref) !== null && _currentVnode$ref !== void 0 && (_currentVnode$ref$i = _currentVnode$ref.i) !== null && _currentVnode$ref$i !== void 0 && _currentVnode$ref$i.emit) {
+    currentVnode.ref.i.emit('update:modelValue', input);
+    return;
+  }
+
+  if (currentVnode.type.toLowerCase() === 'input' && currentVnode.props['onUpdate:modelValue']) {
+    currentVnode.props['onUpdate:modelValue'](input);
+  }
 };
 
 var _onKeyPress = function onKeyPress(button) {
