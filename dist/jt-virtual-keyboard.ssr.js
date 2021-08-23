@@ -134,11 +134,10 @@ styleInject(css_248z);script.render = render;/* eslint-disable import/prefer-def
     shift: ['~ ! @ # $ % ^ & * ( ) _ + {bksp}', '{tab} Q W E R T Y U I O P { } |', '{lock} A S D F G H J K L : " {enter}', '{shift} Z X C V B N M < > ? {shift}', '.com @ {space}']
   }
 };var keyboard;
-var currentElement;
+var currentVnode;
 
 var _onChange = function onChange(input) {
-  currentElement.value = input;
-  console.log('Input changed', input);
+  currentVnode.props['onUpdate:modelValue'](input);
 };
 
 var _onKeyPress = function onKeyPress(button) {
@@ -177,6 +176,10 @@ var showKeyboard = function showKeyboard() {
   }
 };
 
+var findInput = function findInput(el) {
+  return el.tagName === 'INPUT' ? el : el.querySelector('input');
+};
+
 document.addEventListener('DOMContentLoaded', function (event) {
   var simpleKeyboardDiv = document.createRange().createContextualFragment("<div class=\"simple-keyboard jt-virtual-keyboard\"></div>");
   document.body.appendChild(simpleKeyboardDiv);
@@ -192,10 +195,13 @@ document.addEventListener('DOMContentLoaded', function (event) {
   });
 });
 var jtVkDirective = {
-  created: function created(el, binding) {
-    el.addEventListener('focus', function (event) {
+  created: function created(el, binding, vnode) {
+    var input = findInput(el);
+    input.addEventListener('focus', function (event) {
+      console.log('vnode', vnode);
+      console.log(binding.instance);
       toggleLayout(binding.arg);
-      currentElement = el;
+      currentVnode = vnode;
       showKeyboard();
       keyboard.setInput(event.target.value);
     });
@@ -203,7 +209,12 @@ var jtVkDirective = {
     });
   },
   beforeMount: function beforeMount() {},
-  mounted: function mounted() {},
+  mounted: function mounted(el) {
+    var input = findInput(el);
+    input.addEventListener('input', function (event) {
+      binding.instance.$emit('input', input.value);
+    });
+  },
   beforeUpdate: function beforeUpdate() {},
   // new
   updated: function updated() {},

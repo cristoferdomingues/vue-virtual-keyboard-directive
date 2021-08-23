@@ -106,11 +106,10 @@ var englishLayout = {
 };
 
 let keyboard;
-let currentElement;
+let currentVnode;
 
 const onChange = input => {
-  currentElement.value = input;
-  console.log('Input changed', input);
+  currentVnode.props['onUpdate:modelValue'](input);
 };
 
 const onKeyPress = button => {
@@ -149,6 +148,8 @@ const showKeyboard = () => {
   }
 };
 
+const findInput = el => el.tagName === 'INPUT' ? el : el.querySelector('input');
+
 document.addEventListener('DOMContentLoaded', event => {
   let simpleKeyboardDiv = document.createRange().createContextualFragment(`<div class="simple-keyboard jt-virtual-keyboard"></div>`);
   document.body.appendChild(simpleKeyboardDiv);
@@ -160,10 +161,13 @@ document.addEventListener('DOMContentLoaded', event => {
   });
 });
 const jtVkDirective = {
-  created(el, binding) {
-    el.addEventListener('focus', event => {
+  created(el, binding, vnode) {
+    let input = findInput(el);
+    input.addEventListener('focus', event => {
+      console.log('vnode', vnode);
+      console.log(binding.instance);
       toggleLayout(binding.arg);
-      currentElement = el;
+      currentVnode = vnode;
       showKeyboard();
       keyboard.setInput(event.target.value);
     });
@@ -173,7 +177,12 @@ const jtVkDirective = {
 
   beforeMount() {},
 
-  mounted() {},
+  mounted(el) {
+    let input = findInput(el);
+    input.addEventListener('input', event => {
+      binding.instance.$emit('input', input.value);
+    });
+  },
 
   beforeUpdate() {},
 
