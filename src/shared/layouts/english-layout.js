@@ -5,7 +5,7 @@ export default {
       '{tab} q w e r t y u i o p [ ] \\',
       "{lock} a s d f g h j k l ; ' {enter}",
       '{shift} z x c v b n m , . / {shift}',
-      '.com @ {space}',
+      '.com @ {space} {close}',
     ],
     shift: [
       '~ ! @ # $ % ^ & * ( ) _ + {bksp}',

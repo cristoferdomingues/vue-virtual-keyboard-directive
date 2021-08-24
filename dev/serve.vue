@@ -26,7 +26,7 @@ export default defineComponent({
     <input id="phonenumber" type="text" v-model="phone" v-jt-vk:numeric />
     <!--  <jt-virtual-keyboard /> -->
   </div>
-  <div>{{ name }}, {{ lastname }}, {{ phone }}</div>
+  <div>Name: {{ name }} <br/> Lastname: {{ lastname }} <br/> Phone: {{ phone }}</div>
 </template>
 <style scoped>
 #app {

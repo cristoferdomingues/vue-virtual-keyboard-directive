@@ -61,4 +61,7 @@ export default /*#__PURE__*/ defineComponent({
 .simple-keyboard.hide {
   display: none !important;
 }
+.simple-keyboard .hg-button-close {
+ flex:0.11
+}
 </style>

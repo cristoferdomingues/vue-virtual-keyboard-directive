@@ -1,4 +1,3 @@
-import { ComponentInternalInstance, getCurrentInstance } from 'vue-demi';
 import Keyboard from 'simple-keyboard';
 import 'simple-keyboard/build/css/index.css';
 import '@/style/jt-virtual-keyboard.css';
@@ -23,8 +22,18 @@ const onChange = (input) => {
 };
 
 const onKeyPress = (button) => {
-  console.log('Button pressed', button);
-  if (button === '{shift}' || button === '{lock}') handleShift();
+  switch (button) {
+    case '{shift}':
+    case '{lock}':
+      handleShift();
+      break;
+    case '{close}':
+      hideKeyboard();
+      break;
+
+    default:
+      break;
+  }
 };
 
 const handleShift = () => {
@@ -79,9 +88,14 @@ document.addEventListener('DOMContentLoaded', (event) => {
       `<div class="simple-keyboard jt-virtual-keyboard"></div>`
     );
   document.body.appendChild(simpleKeyboardDiv);
+  
   keyboard = new Keyboard({
-    debug: true,
+    debug: false,
     className: 'jt-virtual-keyboard',
+    mergeDisplay: true,
+    display: {
+      '{close}': 'close',
+    },
     onChange: (input) => onChange(input),
     onKeyPress: (button) => onKeyPress(button),
   });
@@ -91,28 +105,12 @@ const jtVkDirective = {
   created(el, binding, vnode) {
     let input = findInput(el);
     input.addEventListener('focus', (event) => {
-      console.log('vnode', vnode);
-      console.log(binding.instance);
       toggleLayout(binding.arg);
       currentVnode = vnode;
       showKeyboard();
       keyboard.setInput(event.target.value);
     });
-    el.addEventListener('blur', (event) => {
-      //hideKeyboard();
-    });
   },
-  beforeMount() {},
-  mounted(el) {
-    let input = findInput(el);
-    input.addEventListener('input', (event) => {
-      binding.instance.$emit('input', input.value);
-    });
-  },
-  beforeUpdate() {}, // new
-  updated() {},
-  beforeUnmount() {}, // new
-  unmounted() {},
 };
 
 export default jtVkDirective;
