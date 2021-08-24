@@ -1,7 +1,7 @@
 import Keyboard from 'simple-keyboard';
 import 'simple-keyboard/build/css/index.css';
 import '@/style/jt-virtual-keyboard.css';
-import { numericLayout, englishLayout } from '@/shared/layouts';
+import { numericLayout, englishLayout, ptABNT2Layout } from '@/shared/layouts';
 
 let keyboard;
 
@@ -30,7 +30,6 @@ const onKeyPress = (button) => {
     case '{close}':
       hideKeyboard();
       break;
-
     default:
       break;
   }
@@ -43,6 +42,7 @@ const handleShift = () => {
   keyboard.setOptions({
     layoutName: shiftToggle,
   });
+  showKeyboard();
 };
 
 const toggleLayout = (type) => {
@@ -50,6 +50,11 @@ const toggleLayout = (type) => {
     case 'numeric':
       keyboard.setOptions({
         layout: numericLayout.layout,
+      });
+      break;
+    case 'abnt':
+      keyboard.setOptions({
+        layout: ptABNT2Layout.layout,
       });
       break;
 
@@ -88,13 +93,16 @@ document.addEventListener('DOMContentLoaded', (event) => {
       `<div class="simple-keyboard jt-virtual-keyboard"></div>`
     );
   document.body.appendChild(simpleKeyboardDiv);
-  
+
   keyboard = new Keyboard({
     debug: false,
     className: 'jt-virtual-keyboard',
     mergeDisplay: true,
     display: {
-      '{close}': 'close',
+      '{close}': 'close ⬇',
+      '{bksp}': '⌫ backspace',
+      '{enter}': '⏎ enter',
+      '{shift}': '⬆ shift',
     },
     onChange: (input) => onChange(input),
     onKeyPress: (button) => onKeyPress(button),
