@@ -21,12 +21,16 @@ export default defineComponent({
     <label for="name">Name</label>
     <input id="name" type="text" v-model="name" v-jt-vk />
     <label for="lastname">Last Name</label>
-    <input id="lastname" type="text" v-model="lastname" v-jt-vk:abnt/>
+    <input id="lastname" type="text" v-model="lastname" v-jt-vk />
     <label for="phonenumber">Phone Number</label>
     <input id="phonenumber" type="text" v-model="phone" v-jt-vk:numeric />
     <!--  <jt-virtual-keyboard /> -->
   </div>
-  <div>Name: {{ name }} <br/> Lastname: {{ lastname }} <br/> Phone: {{ phone }}</div>
+  <div>
+    Name: {{ name }} <br />
+    Lastname: {{ lastname }} <br />
+    Phone: {{ phone }}
+  </div>
 </template>
 <style scoped>
 #app {

@@ -1,7 +1,7 @@
 import Keyboard from 'simple-keyboard';
 import 'simple-keyboard/build/css/index.css';
 import '@/style/jt-virtual-keyboard.css';
-import { numericLayout, englishLayout, ptABNT2Layout } from '@/shared/layouts';
+import * as keyboardLayouts from '@/shared/layouts';
 
 let keyboard;
 
@@ -30,6 +30,9 @@ const onKeyPress = (button) => {
     case '{close}':
       hideKeyboard();
       break;
+    case '{enter}':
+     console.log(currentVnode)
+      break;
     default:
       break;
   }
@@ -46,21 +49,27 @@ const handleShift = () => {
 };
 
 const toggleLayout = (type) => {
+  let { numericLayout, pt_BR, en_US } = keyboardLayouts;
   switch (type) {
     case 'numeric':
       keyboard.setOptions({
         layout: numericLayout.layout,
       });
       break;
-    case 'abnt':
+    case 'en':
       keyboard.setOptions({
-        layout: ptABNT2Layout.layout,
+        layout: en_US.layout,
       });
       break;
-
+    case 'pt':
+      keyboard.setOptions({
+        layout: pt_BR.layout,
+      });
     default:
       keyboard.setOptions({
-        layout: englishLayout.layout,
+        layout:
+          keyboardLayouts[navigator.language.replace('-', '_')]?.layout ??
+          en_US.layout,
       });
       break;
   }
