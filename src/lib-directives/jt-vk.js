@@ -156,24 +156,3 @@ const jtVkDirective = {
 };
 
 export default jtVkDirective;
-/* 
-keyboard
-
-bottom: 770
-height: 230
-left: 0
-right: 1440
-top: 540
-width: 1440
-x: 0
-y: 540
-
-
-botão a 
-client
-x192 y656
-page
-x617 y148
-
-translate: (calc(clientX - 50%),calc(keyboardBottom - clientY - 60px))
-*/
