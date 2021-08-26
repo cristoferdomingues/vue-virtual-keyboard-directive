@@ -80,7 +80,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, null, 2);
 }
 
-var css_248z = "\n.simple-keyboard {\n  display: none;\n  position: absolute;\n  bottom: 0;\n  right: 0;\n  z-index: 100;\n}\n.simple-keyboard.show {\n  display: block !important;\n}\n.simple-keyboard.hide {\n  display: none !important;\n}\n.simple-keyboard .hg-button-close {\n  flex: 0.11;\n}\n.simple-keyboard .hg-button-close:only-child {\n  flex: 1;\n}\n";
+var css_248z = "\n.simple-keyboard {\n  display: none;\n  position: absolute;\n  bottom: 0;\n  right: 0;\n  z-index: 100;\n}\n.simple-keyboard.show {\n  display: block !important;\n}\n.simple-keyboard.hide {\n  display: none !important;\n}\n.simple-keyboard .hg-button-close {\n  flex: 0.11;\n}\n.simple-keyboard .hg-button-close:only-child {\n  flex: 1;\n}\n.simple-keyboard.numeric-theme .hg-row:not(:last-child) {\n  display: grid;\n  grid-template-rows: auto;\n  grid-template-columns: repeat(3, calc(100% / 3));\n}\n.simple-keyboard.numeric-theme .hg-button.hg-standardBtn {\n  width: auto;\n}\n";
 styleInject(css_248z);
 
 script.render = render;
@@ -108,8 +108,20 @@ var en_USLayout = {
 
 var pt_BRLayout = {
   layout: {
-    default: ["' 1 2 3 4 5 6 7 8 9 0 - = {bksp}", "{tab} q w e r t y u i o p ' [", "{lock} a s d f g h j k l ç ~ ] {enter}", '{shift} \\ z x c v b n m , . ; / {shift}', '.com @ {space} {close}'],
+    default: ["' 1 2 3 4 5 6 7 8 9 0 - = {bksp}", "{tab} q w e r t y u i o p ' [", '{lock} a s d f g h j k l ç ~ ] {enter}', '{shift} \\ z x c v b n m , . ; / {shift}', '.com @ {space} {close}'],
     shift: ['" ! @ # $ % ^ & * ( ) _ + {bksp}', '{tab} Q W E R T Y U I O P ` {', '{lock} A S D F G H J K L Ç ^ } {enter}', '{shift} | Z X C V B N M < > : ? {shift}', '.com @ {space} {close}']
+  },
+  layoutCandidates: {
+    a: 'á à ã',
+    A: 'Á À Ã',
+    e: 'é è ê ë',
+    E: 'É È Ê Ë',
+    i: 'í ì',
+    I: 'Í Ì',
+    o: 'ô ö ò ó õ',
+    O: 'Ô Ö Ò Ó Õ',
+    u: 'û ü ù ú',
+    U: 'Û Ü Ù Ú'
   }
 }; //http://www.mhavila.com.br/link/unix/abnt2/
 
@@ -163,7 +175,7 @@ const handleShift = () => {
 };
 
 const toggleLayout = type => {
-  var _keyboardLayouts$navi;
+  var _keyboardLayouts$navi, _keyboardLayouts$navi2;
 
   let {
     numericLayout,
@@ -174,24 +186,32 @@ const toggleLayout = type => {
   switch (type) {
     case 'numeric':
       keyboard.setOptions({
-        layout: numericLayout.layout
+        theme: 'hg-theme-default numeric-theme',
+        layout: numericLayout.layout,
+        layoutCandidates: numericLayout.layoutCandidates
       });
       break;
 
     case 'en':
       keyboard.setOptions({
-        layout: en_US.layout
+        theme: 'hg-theme-default',
+        layout: en_US.layout,
+        layoutCandidates: en_US.layoutCandidates
       });
       break;
 
     case 'pt':
       keyboard.setOptions({
-        layout: pt_BR.layout
+        theme: 'hg-theme-default',
+        layout: pt_BR.layout,
+        layoutCandidates: pt_BR.layoutCandidates
       });
 
     default:
       keyboard.setOptions({
-        layout: ((_keyboardLayouts$navi = keyboardLayouts[navigator.language.replace('-', '_')]) === null || _keyboardLayouts$navi === void 0 ? void 0 : _keyboardLayouts$navi.layout) ?? en_US.layout
+        theme: 'hg-theme-default',
+        layout: ((_keyboardLayouts$navi = keyboardLayouts[navigator.language.replace('-', '_')]) === null || _keyboardLayouts$navi === void 0 ? void 0 : _keyboardLayouts$navi.layout) ?? en_US.layout,
+        layoutCandidates: ((_keyboardLayouts$navi2 = keyboardLayouts[navigator.language.replace('-', '_')]) === null || _keyboardLayouts$navi2 === void 0 ? void 0 : _keyboardLayouts$navi2.layoutCandidates) ?? en_US.layoutCandidates
       });
       break;
   }
@@ -213,15 +233,29 @@ const hideKeyboard = () => {
 
 const findInput = el => el.tagName === 'INPUT' ? el : el.querySelector('input');
 
+const setCandidateBoxPosition = ({
+  clientX,
+  clientY
+}) => {
+  let keyboardPosition = document.querySelector('.simple-keyboard').getBoundingClientRect();
+  let canditateBox = document.querySelector('.hg-candidate-box');
+
+  if (canditateBox) {
+    canditateBox.style.transform = `translate(calc(${clientX}px - 50%), calc(${keyboardPosition.bottom}px - ${clientY}px - 60px))`;
+  }
+};
+
 document.addEventListener('DOMContentLoaded', event => {
   let simpleKeyboardDiv = document.createRange().createContextualFragment(`<div class="simple-keyboard jt-virtual-keyboard"></div>`);
   document.body.appendChild(simpleKeyboardDiv);
   keyboard = new Keyboard({
     debug: false,
+    enableLayoutCandidates: true,
+    layoutCandidatesPageSize: 5,
     className: 'jt-virtual-keyboard',
     mergeDisplay: true,
     display: {
-      '{close}': 'close ⬇',
+      '{close}': '⬇ close',
       '{bksp}': '⌫ backspace',
       '{enter}': '⏎ enter',
       '{shift}': '⬆ shift'
@@ -230,6 +264,7 @@ document.addEventListener('DOMContentLoaded', event => {
     onKeyPress: button => onKeyPress(button)
   });
 });
+document.addEventListener('click', setCandidateBoxPosition);
 const jtVkDirective = {
   created(el, binding, vnode) {
     let input = findInput(el);
@@ -243,6 +278,27 @@ const jtVkDirective = {
 
 };
 var jtVkDirective$1 = jtVkDirective;
+/* 
+keyboard
+
+bottom: 770
+height: 230
+left: 0
+right: 1440
+top: 540
+width: 1440
+x: 0
+y: 540
+
+
+botão a 
+client
+x192 y656
+page
+x617 y148
+
+translate: (calc(clientX - 50%),calc(keyboardBottom - clientY - 60px))
+*/
 
 var directives = /*#__PURE__*/Object.freeze({
   __proto__: null,

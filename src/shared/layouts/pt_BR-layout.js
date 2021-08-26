@@ -15,7 +15,18 @@ export default {
       '.com @ {space} {close}',
     ],
   },
-  layoutCandidates: { a: 'á à ã', e: 'é è ê ë', i: 'í ì', o: 'ô ö ò ó õ', u:'û ü ù ú' },
+  layoutCandidates: {
+    a: 'á à ã',
+    A: 'Á À Ã',
+    e: 'é è ê ë',
+    E: 'É È Ê Ë',
+    i: 'í ì',
+    I: 'Í Ì',
+    o: 'ô ö ò ó õ',
+    O: 'Ô Ö Ò Ó Õ',
+    u: 'û ü ù ú',
+    U: 'Û Ü Ù Ú',
+  },
 };
 
 //http://www.mhavila.com.br/link/unix/abnt2/

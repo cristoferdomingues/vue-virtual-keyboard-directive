@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
   document.body.appendChild(simpleKeyboardDiv);
 
   keyboard = new Keyboard({
-    debug: true,
+    debug: false,
     enableLayoutCandidates: true,
     layoutCandidatesPageSize: 5,
     className: 'jt-virtual-keyboard',

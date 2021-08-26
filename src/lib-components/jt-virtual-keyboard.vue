@@ -67,4 +67,14 @@ export default /*#__PURE__*/ defineComponent({
 .simple-keyboard .hg-button-close:only-child {
   flex: 1;
 }
+
+.simple-keyboard.numeric-theme .hg-row:not(:last-child) {
+  display: grid;
+  grid-template-rows: auto;
+  grid-template-columns: repeat(3, calc(100% / 3));
+}
+
+.simple-keyboard.numeric-theme .hg-button.hg-standardBtn {
+  width: auto;
+}
 </style>

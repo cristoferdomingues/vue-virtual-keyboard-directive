@@ -123,7 +123,7 @@ styleInject(css_248z$1);var script = /*#__PURE__*/vue.defineComponent({
   return vue.openBlock(), vue.createElementBlock("div", {
     class: vue.normalizeClass(_ctx.keyboardClass)
   }, null, 2);
-}var css_248z = "\n.simple-keyboard {\n  display: none;\n  position: absolute;\n  bottom: 0;\n  right: 0;\n  z-index: 100;\n}\n.simple-keyboard.show {\n  display: block !important;\n}\n.simple-keyboard.hide {\n  display: none !important;\n}\n.simple-keyboard .hg-button-close {\n  flex: 0.11;\n}\n.simple-keyboard .hg-button-close:only-child {\n  flex: 1;\n}\n";
+}var css_248z = "\n.simple-keyboard {\n  display: none;\n  position: absolute;\n  bottom: 0;\n  right: 0;\n  z-index: 100;\n}\n.simple-keyboard.show {\n  display: block !important;\n}\n.simple-keyboard.hide {\n  display: none !important;\n}\n.simple-keyboard .hg-button-close {\n  flex: 0.11;\n}\n.simple-keyboard .hg-button-close:only-child {\n  flex: 1;\n}\n.simple-keyboard.numeric-theme .hg-row:not(:last-child) {\n  display: grid;\n  grid-template-rows: auto;\n  grid-template-columns: repeat(3, calc(100% / 3));\n}\n.simple-keyboard.numeric-theme .hg-button.hg-standardBtn {\n  width: auto;\n}\n";
 styleInject(css_248z);script.render = render;/* eslint-disable import/prefer-default-export */var components$1=/*#__PURE__*/Object.freeze({__proto__:null,JtVirtualKeyboard: script});var numericLayout = {
   layout: {
     // default: ['1 2 3', '4 5 6', '7 8 9', '0', '_ - .', '{bksp} {enter} {close}'],
@@ -136,8 +136,20 @@ styleInject(css_248z);script.render = render;/* eslint-disable import/prefer-def
   }
 };var pt_BRLayout = {
   layout: {
-    default: ["' 1 2 3 4 5 6 7 8 9 0 - = {bksp}", "{tab} q w e r t y u i o p ' [", "{lock} a s d f g h j k l ç ~ ] {enter}", '{shift} \\ z x c v b n m , . ; / {shift}', '.com @ {space} {close}'],
+    default: ["' 1 2 3 4 5 6 7 8 9 0 - = {bksp}", "{tab} q w e r t y u i o p ' [", '{lock} a s d f g h j k l ç ~ ] {enter}', '{shift} \\ z x c v b n m , . ; / {shift}', '.com @ {space} {close}'],
     shift: ['" ! @ # $ % ^ & * ( ) _ + {bksp}', '{tab} Q W E R T Y U I O P ` {', '{lock} A S D F G H J K L Ç ^ } {enter}', '{shift} | Z X C V B N M < > : ? {shift}', '.com @ {space} {close}']
+  },
+  layoutCandidates: {
+    a: 'á à ã',
+    A: 'Á À Ã',
+    e: 'é è ê ë',
+    E: 'É È Ê Ë',
+    i: 'í ì',
+    I: 'Í Ì',
+    o: 'ô ö ò ó õ',
+    O: 'Ô Ö Ò Ó Õ',
+    u: 'û ü ù ú',
+    U: 'Û Ü Ù Ú'
   }
 }; //http://www.mhavila.com.br/link/unix/abnt2/
 var keyboardLayouts=/*#__PURE__*/Object.freeze({__proto__:null,numericLayout: numericLayout,en_US: en_USLayout,pt_BR: pt_BRLayout});var keyboard;
@@ -183,7 +195,7 @@ var handleShift = function handleShift() {
 };
 
 var toggleLayout = function toggleLayout(type) {
-  var _keyboardLayouts$navi, _keyboardLayouts$navi2;
+  var _keyboardLayouts$navi, _keyboardLayouts$navi2, _keyboardLayouts$navi3, _keyboardLayouts$navi4;
 
   var numericLayout$1 = numericLayout,
       pt_BR = pt_BRLayout,
@@ -192,24 +204,32 @@ var toggleLayout = function toggleLayout(type) {
   switch (type) {
     case 'numeric':
       keyboard.setOptions({
-        layout: numericLayout$1.layout
+        theme: 'hg-theme-default numeric-theme',
+        layout: numericLayout$1.layout,
+        layoutCandidates: numericLayout$1.layoutCandidates
       });
       break;
 
     case 'en':
       keyboard.setOptions({
-        layout: en_US.layout
+        theme: 'hg-theme-default',
+        layout: en_US.layout,
+        layoutCandidates: en_US.layoutCandidates
       });
       break;
 
     case 'pt':
       keyboard.setOptions({
-        layout: pt_BR.layout
+        theme: 'hg-theme-default',
+        layout: pt_BR.layout,
+        layoutCandidates: pt_BR.layoutCandidates
       });
 
     default:
       keyboard.setOptions({
-        layout: (_keyboardLayouts$navi = (_keyboardLayouts$navi2 = keyboardLayouts[navigator.language.replace('-', '_')]) === null || _keyboardLayouts$navi2 === void 0 ? void 0 : _keyboardLayouts$navi2.layout) !== null && _keyboardLayouts$navi !== void 0 ? _keyboardLayouts$navi : en_US.layout
+        theme: 'hg-theme-default',
+        layout: (_keyboardLayouts$navi = (_keyboardLayouts$navi2 = keyboardLayouts[navigator.language.replace('-', '_')]) === null || _keyboardLayouts$navi2 === void 0 ? void 0 : _keyboardLayouts$navi2.layout) !== null && _keyboardLayouts$navi !== void 0 ? _keyboardLayouts$navi : en_US.layout,
+        layoutCandidates: (_keyboardLayouts$navi3 = (_keyboardLayouts$navi4 = keyboardLayouts[navigator.language.replace('-', '_')]) === null || _keyboardLayouts$navi4 === void 0 ? void 0 : _keyboardLayouts$navi4.layoutCandidates) !== null && _keyboardLayouts$navi3 !== void 0 ? _keyboardLayouts$navi3 : en_US.layoutCandidates
       });
       break;
   }
@@ -233,15 +253,28 @@ var findInput = function findInput(el) {
   return el.tagName === 'INPUT' ? el : el.querySelector('input');
 };
 
+var setCandidateBoxPosition = function setCandidateBoxPosition(_ref) {
+  var clientX = _ref.clientX,
+      clientY = _ref.clientY;
+  var keyboardPosition = document.querySelector('.simple-keyboard').getBoundingClientRect();
+  var canditateBox = document.querySelector('.hg-candidate-box');
+
+  if (canditateBox) {
+    canditateBox.style.transform = "translate(calc(".concat(clientX, "px - 50%), calc(").concat(keyboardPosition.bottom, "px - ").concat(clientY, "px - 60px))");
+  }
+};
+
 document.addEventListener('DOMContentLoaded', function (event) {
   var simpleKeyboardDiv = document.createRange().createContextualFragment("<div class=\"simple-keyboard jt-virtual-keyboard\"></div>");
   document.body.appendChild(simpleKeyboardDiv);
   keyboard = new Keyboard__default['default']({
     debug: false,
+    enableLayoutCandidates: true,
+    layoutCandidatesPageSize: 5,
     className: 'jt-virtual-keyboard',
     mergeDisplay: true,
     display: {
-      '{close}': 'close ⬇',
+      '{close}': '⬇ close',
       '{bksp}': '⌫ backspace',
       '{enter}': '⏎ enter',
       '{shift}': '⬆ shift'
@@ -254,6 +287,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
     }
   });
 });
+document.addEventListener('click', setCandidateBoxPosition);
 var jtVkDirective = {
   created: function created(el, binding, vnode) {
     var input = findInput(el);
@@ -265,7 +299,28 @@ var jtVkDirective = {
     });
   }
 };
-var jtVkDirective$1 = jtVkDirective;var directives=/*#__PURE__*/Object.freeze({__proto__:null,jtVk: jtVkDirective$1});var install = function installJtVirtualKeyboard(app) {
+var jtVkDirective$1 = jtVkDirective;
+/* 
+keyboard
+
+bottom: 770
+height: 230
+left: 0
+right: 1440
+top: 540
+width: 1440
+x: 0
+y: 540
+
+
+botão a 
+client
+x192 y656
+page
+x617 y148
+
+translate: (calc(clientX - 50%),calc(keyboardBottom - clientY - 60px))
+*/var directives=/*#__PURE__*/Object.freeze({__proto__:null,jtVk: jtVkDirective$1});var install = function installJtVirtualKeyboard(app) {
   Object.entries(components$1).forEach(function (_ref) {
     var _ref2 = _slicedToArray(_ref, 2),
         componentName = _ref2[0],
