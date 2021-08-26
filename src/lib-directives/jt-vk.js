@@ -31,7 +31,7 @@ const onKeyPress = (button) => {
       hideKeyboard();
       break;
     case '{enter}':
-     console.log(currentVnode)
+      console.log(currentVnode);
       break;
     default:
       break;
@@ -53,23 +53,33 @@ const toggleLayout = (type) => {
   switch (type) {
     case 'numeric':
       keyboard.setOptions({
+        theme: 'hg-theme-default numeric-theme',
         layout: numericLayout.layout,
+        layoutCandidates: numericLayout.layoutCandidates,
       });
       break;
     case 'en':
       keyboard.setOptions({
+        theme: 'hg-theme-default',
         layout: en_US.layout,
+        layoutCandidates: en_US.layoutCandidates,
       });
       break;
     case 'pt':
       keyboard.setOptions({
+        theme: 'hg-theme-default',
         layout: pt_BR.layout,
+        layoutCandidates: pt_BR.layoutCandidates,
       });
     default:
       keyboard.setOptions({
+        theme: 'hg-theme-default',
         layout:
           keyboardLayouts[navigator.language.replace('-', '_')]?.layout ??
           en_US.layout,
+        layoutCandidates:
+          keyboardLayouts[navigator.language.replace('-', '_')]
+            ?.layoutCandidates ?? en_US.layoutCandidates,
       });
       break;
   }
@@ -83,6 +93,7 @@ const showKeyboard = () => {
     document.querySelector('body .simple-keyboard').classList.add('show');
   }
 };
+
 const hideKeyboard = () => {
   if (
     !document.querySelector('body .simple-keyboard').classList.contains('hide')
@@ -95,6 +106,16 @@ const hideKeyboard = () => {
 const findInput = (el) =>
   el.tagName === 'INPUT' ? el : el.querySelector('input');
 
+const setCandidateBoxPosition = ({ clientX, clientY }) => {
+  let keyboardPosition = document
+    .querySelector('.simple-keyboard')
+    .getBoundingClientRect();
+  let canditateBox = document.querySelector('.hg-candidate-box');
+  if (canditateBox) {
+    canditateBox.style.transform = `translate(calc(${clientX}px - 50%), calc(${keyboardPosition.bottom}px - ${clientY}px - 60px))`;
+  }
+};
+
 document.addEventListener('DOMContentLoaded', (event) => {
   let simpleKeyboardDiv = document
     .createRange()
@@ -104,11 +125,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
   document.body.appendChild(simpleKeyboardDiv);
 
   keyboard = new Keyboard({
-    debug: false,
+    debug: true,
+    enableLayoutCandidates: true,
+    layoutCandidatesPageSize: 5,
     className: 'jt-virtual-keyboard',
     mergeDisplay: true,
     display: {
-      '{close}': 'close ⬇',
+      '{close}': '⬇ close',
       '{bksp}': '⌫ backspace',
       '{enter}': '⏎ enter',
       '{shift}': '⬆ shift',
@@ -117,6 +140,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
     onKeyPress: (button) => onKeyPress(button),
   });
 });
+
+document.addEventListener('click', setCandidateBoxPosition);
 
 const jtVkDirective = {
   created(el, binding, vnode) {
@@ -131,3 +156,24 @@ const jtVkDirective = {
 };
 
 export default jtVkDirective;
+/* 
+keyboard
+
+bottom: 770
+height: 230
+left: 0
+right: 1440
+top: 540
+width: 1440
+x: 0
+y: 540
+
+
+botão a 
+client
+x192 y656
+page
+x617 y148
+
+translate: (calc(clientX - 50%),calc(keyboardBottom - clientY - 60px))
+*/

@@ -123,7 +123,7 @@ styleInject(css_248z$1);var script = /*#__PURE__*/vue.defineComponent({
   return vue.openBlock(), vue.createElementBlock("div", {
     class: vue.normalizeClass(_ctx.keyboardClass)
   }, null, 2);
-}var css_248z = "\n.simple-keyboard {\n  display: none;\n  position: absolute;\n  bottom: 0;\n  right: 0;\n  z-index: 100;\n}\n.simple-keyboard.show {\n  display: block !important;\n}\n.simple-keyboard.hide {\n  display: none !important;\n}\n.simple-keyboard .hg-button-close {\n flex:0.11\n}\n";
+}var css_248z = "\n.simple-keyboard {\n  display: none;\n  position: absolute;\n  bottom: 0;\n  right: 0;\n  z-index: 100;\n}\n.simple-keyboard.show {\n  display: block !important;\n}\n.simple-keyboard.hide {\n  display: none !important;\n}\n.simple-keyboard .hg-button-close {\n  flex: 0.11;\n}\n.simple-keyboard .hg-button-close:only-child {\n  flex: 1;\n}\n";
 styleInject(css_248z);script.render = render;/* eslint-disable import/prefer-default-export */var components$1=/*#__PURE__*/Object.freeze({__proto__:null,JtVirtualKeyboard: script});var numericLayout = {
   layout: {
     // default: ['1 2 3', '4 5 6', '7 8 9', '0', '_ - .', '{bksp} {enter} {close}'],

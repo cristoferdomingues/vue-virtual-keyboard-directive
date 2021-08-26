@@ -80,7 +80,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, null, 2);
 }
 
-var css_248z = "\n.simple-keyboard {\n  display: none;\n  position: absolute;\n  bottom: 0;\n  right: 0;\n  z-index: 100;\n}\n.simple-keyboard.show {\n  display: block !important;\n}\n.simple-keyboard.hide {\n  display: none !important;\n}\n.simple-keyboard .hg-button-close {\n flex:0.11\n}\n";
+var css_248z = "\n.simple-keyboard {\n  display: none;\n  position: absolute;\n  bottom: 0;\n  right: 0;\n  z-index: 100;\n}\n.simple-keyboard.show {\n  display: block !important;\n}\n.simple-keyboard.hide {\n  display: none !important;\n}\n.simple-keyboard .hg-button-close {\n  flex: 0.11;\n}\n.simple-keyboard .hg-button-close:only-child {\n  flex: 1;\n}\n";
 styleInject(css_248z);
 
 script.render = render;
