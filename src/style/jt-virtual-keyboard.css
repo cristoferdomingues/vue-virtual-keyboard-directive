@@ -32,7 +32,7 @@
 
 .simple-keyboard.show {
   /*  display: block !important; */
-  top: 70%;
+  top: calc(100% - 230px);
 }
 
 .simple-keyboard.hide {
@@ -55,4 +55,49 @@
 
 .simple-keyboard.numeric-theme .hg-button.hg-standardBtn {
   width: auto;
+}
+
+/* Small Devices */
+@media (min-width: 43em) {
+  .simple-keyboard.hg-theme-default .hg-rows .hg-row .hg-button > span {
+    font-size: 15px !important;
+  }
+
+  .simple-keyboard.numeric-theme .hg-rows .hg-row .hg-button > span {
+    font-size: 20px !important;
+  }
+}
+
+/* Large Devices */
+@media (min-width: 62em) {
+  .simple-keyboard.hg-theme-default .hg-rows .hg-row .hg-button > span {
+    font-size: 20px !important;
+  }
+
+  .simple-keyboard.numeric-theme .hg-rows .hg-row .hg-button > span {
+    font-size: 25px !important;
+  }
+}
+
+/* Extra Large Devices */
+@media (min-width: 82em) {
+  .simple-keyboard.hg-theme-default .hg-rows .hg-row .hg-button > span {
+    color: #092147;
+    font-size: 25px;
+    font-weight: bold;
+  }
+
+  .simple-keyboard.numeric-theme .hg-rows .hg-row .hg-button > span {
+    font-size: 30px;
+  }
+}
+
+@media (max-width: 62em) {
+  .simple-keyboard.hg-theme-default .hg-rows .hg-row .hg-button > span {
+    font-size: 10px !important;
+  }
+
+  .simple-keyboard.numeric-theme .hg-rows .hg-row .hg-button > span {
+    font-size: 15px !important;
+  }
 }
