@@ -1,6 +1,6 @@
 {
   "name": "jt-virtual-keyboard",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "",
   "main": "dist/jt-virtual-keyboard.ssr.js",
   "browser": "dist/jt-virtual-keyboard.esm.js",
