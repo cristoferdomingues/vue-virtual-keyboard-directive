@@ -80,7 +80,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, null, 2);
 }
 
-var css_248z = "\n.simple-keyboard {\n  display: none;\n  position: absolute;\n  bottom: 0;\n  right: 0;\n  z-index: 100;\n}\n.simple-keyboard.show {\n  display: block !important;\n}\n.simple-keyboard.hide {\n  display: none !important;\n}\n.simple-keyboard .hg-button-close {\n  flex: 0.11;\n}\n.simple-keyboard .hg-button-close:only-child {\n  flex: 1;\n}\n.simple-keyboard.numeric-theme .hg-row:not(:last-child) {\n  display: grid;\n  grid-template-rows: auto;\n  grid-template-columns: repeat(3, calc(100% / 3));\n}\n.simple-keyboard.numeric-theme .hg-button.hg-standardBtn {\n  width: auto;\n}\n";
+var css_248z = "\n.simple-keyboard {\n  top: 100%;\n  position: absolute;\n  bottom: 0;\n  right: 0;\n  z-index: 100;\n  transition: all 0.3s ease-out;\n}\n.simple-keyboard.hg-theme-default {\n  background-color: #dce8f2;\n}\n.simple-keyboard.hg-theme-default .hg-rows .hg-row .hg-button > span {\n  color: #092147;\n  font-size: 25px;\n  font-weight: bold;\n}\n.simple-keyboard.numeric-theme .hg-rows .hg-row .hg-button > span {\n  font-size: 30px;\n}\n.simple-keyboard.hg-theme-default .hg-candidate-box .hg-candidate-box-prev,\n.simple-keyboard.hg-theme-default .hg-candidate-box .hg-candidate-box-next {\n  background: #dce8f2;\n  color: #092147;\n}\n.simple-keyboard.hg-theme-default .hg-candidate-box .hg-candidate-box-list {\n  background-color: #fff;\n}\n.simple-keyboard.show {\n  /*  display: block !important; */\n  top: 70%;\n}\n.simple-keyboard.hide {\n  /* display: none !important; */\n  top: 100%;\n}\n.simple-keyboard .hg-button-close {\n  flex: 0.11;\n}\n.simple-keyboard .hg-button-close:only-child {\n  flex: 1;\n}\n.simple-keyboard.numeric-theme .hg-row:not(:last-child) {\n  display: grid;\n  grid-template-rows: auto;\n  grid-template-columns: repeat(3, calc(100% / 3));\n}\n.simple-keyboard.numeric-theme .hg-button.hg-standardBtn {\n  width: auto;\n}\n";
 styleInject(css_248z);
 
 script.render = render;
@@ -278,27 +278,6 @@ const jtVkDirective = {
 
 };
 var jtVkDirective$1 = jtVkDirective;
-/* 
-keyboard
-
-bottom: 770
-height: 230
-left: 0
-right: 1440
-top: 540
-width: 1440
-x: 0
-y: 540
-
-
-botão a 
-client
-x192 y656
-page
-x617 y148
-
-translate: (calc(clientX - 50%),calc(keyboardBottom - clientY - 60px))
-*/
 
 var directives = /*#__PURE__*/Object.freeze({
   __proto__: null,
