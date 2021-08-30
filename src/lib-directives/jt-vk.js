@@ -153,7 +153,6 @@ const jtVkDirective = {
   created(el, binding, vnode) {
     let input = findInput(el);
     input.addEventListener('focus', (event) => {
-     binding.
       toggleLayout(binding.arg);
       currentVnode = vnode;
       showKeyboard();

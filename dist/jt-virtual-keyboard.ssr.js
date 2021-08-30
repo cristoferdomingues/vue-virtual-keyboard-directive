@@ -124,7 +124,35 @@ styleInject(css_248z$1);var script = /*#__PURE__*/vue.defineComponent({
     class: vue.normalizeClass(_ctx.keyboardClass)
   }, null, 2);
 }var css_248z = "\n.simple-keyboard {\n  top: 100%;\n  position: absolute;\n  bottom: 0;\n  right: 0;\n  z-index: 100;\n  transition: all 0.3s ease-out;\n}\n.simple-keyboard.hg-theme-default {\n  background-color: #dce8f2;\n}\n.simple-keyboard.hg-theme-default .hg-rows .hg-row .hg-button > span {\n  color: #092147;\n  font-size: 25px;\n  font-weight: bold;\n}\n.simple-keyboard.numeric-theme .hg-rows .hg-row .hg-button > span {\n  font-size: 30px;\n}\n.simple-keyboard.hg-theme-default .hg-candidate-box .hg-candidate-box-prev,\n.simple-keyboard.hg-theme-default .hg-candidate-box .hg-candidate-box-next {\n  background: #dce8f2;\n  color: #092147;\n}\n.simple-keyboard.hg-theme-default .hg-candidate-box .hg-candidate-box-list {\n  background-color: #fff;\n}\n.simple-keyboard.show {\n  top: calc(100% - 230px);\n}\n.simple-keyboard.hide {\n  top: 100%;\n}\n.simple-keyboard.hg-theme-default .hg-button.hg-button-close {\n  flex: 0.11;\n}\n.simple-keyboard.hg-theme-default .hg-button.hg-button-close:only-child {\n  flex: 1;\n}\n.simple-keyboard.numeric-theme .hg-row:not(:last-child) {\n  display: grid;\n  grid-template-rows: auto;\n  grid-template-columns: repeat(3, calc(100% / 3));\n}\n.simple-keyboard.numeric-theme .hg-button.hg-standardBtn {\n  width: auto;\n}\n\n/* Small Devices */\n@media (min-width: 43em) {\n.simple-keyboard.hg-theme-default .hg-rows .hg-row .hg-button > span {\n    font-size: 15px !important;\n}\n.simple-keyboard.numeric-theme .hg-rows .hg-row .hg-button > span {\n    font-size: 20px !important;\n}\n}\n\n/* Large Devices */\n@media (min-width: 62em) {\n.simple-keyboard.hg-theme-default .hg-rows .hg-row .hg-button > span {\n    font-size: 20px !important;\n}\n.simple-keyboard.numeric-theme .hg-rows .hg-row .hg-button > span {\n    font-size: 25px !important;\n}\n}\n\n/* Extra Large Devices */\n@media (min-width: 82em) {\n.simple-keyboard.hg-theme-default .hg-rows .hg-row .hg-button > span {\n    color: #092147;\n    font-size: 25px;\n    font-weight: bold;\n}\n.simple-keyboard.numeric-theme .hg-rows .hg-row .hg-button > span {\n    font-size: 30px;\n}\n}\n@media (max-width: 62em) {\n.simple-keyboard.hg-theme-default .hg-rows .hg-row .hg-button > span {\n    font-size: 10px !important;\n}\n.simple-keyboard.numeric-theme .hg-rows .hg-row .hg-button > span {\n    font-size: 15px !important;\n}\n}\n";
-styleInject(css_248z);script.render = render;/* eslint-disable import/prefer-default-export */var components$1=/*#__PURE__*/Object.freeze({__proto__:null,JtVirtualKeyboard: script});var keyboard;
+styleInject(css_248z);script.render = render;/* eslint-disable import/prefer-default-export */var components$1=/*#__PURE__*/Object.freeze({__proto__:null,JtVirtualKeyboard: script});var numericLayout = {
+  layout: {
+    // default: ['1 2 3', '4 5 6', '7 8 9', '0', '_ - .', '{bksp} {enter} {close}'],
+    default: ['1 2 3', '4 5 6', '7 8 9', '{bksp} 0 {enter}', '{close}']
+  }
+};var en_USLayout = {
+  layout: {
+    default: ['` 1 2 3 4 5 6 7 8 9 0 - = {bksp}', '{tab} q w e r t y u i o p [ ] \\', "{lock} a s d f g h j k l ; ' {enter}", '{shift} z x c v b n m , . / {shift}', '.com @ {space} {close}'],
+    shift: ['~ ! @ # $ % ^ & * ( ) _ + {bksp}', '{tab} Q W E R T Y U I O P { } |', '{lock} A S D F G H J K L : " {enter}', '{shift} Z X C V B N M < > ? {shift}', '.com @ {space} {close}']
+  }
+};var pt_BRLayout = {
+  layout: {
+    default: ["' 1 2 3 4 5 6 7 8 9 0 - = {bksp}", "{tab} q w e r t y u i o p ' [", '{lock} a s d f g h j k l ç ~ ] {enter}', '{shift} \\ z x c v b n m , . ; / {shift}', '.com @ {space} {close}'],
+    shift: ['" ! @ # $ % ^ & * ( ) _ + {bksp}', '{tab} Q W E R T Y U I O P ` {', '{lock} A S D F G H J K L Ç ^ } {enter}', '{shift} | Z X C V B N M < > : ? {shift}', '.com @ {space} {close}']
+  },
+  layoutCandidates: {
+    a: 'á à ã',
+    A: 'Á À Ã',
+    e: 'é è ê ë',
+    E: 'É È Ê Ë',
+    i: 'í ì',
+    I: 'Í Ì',
+    o: 'ô ö ò ó õ',
+    O: 'Ô Ö Ò Ó Õ',
+    u: 'û ü ù ú',
+    U: 'Û Ü Ù Ú'
+  }
+}; //http://www.mhavila.com.br/link/unix/abnt2/
+var keyboardLayouts=/*#__PURE__*/Object.freeze({__proto__:null,numericLayout: numericLayout,en_US: en_USLayout,pt_BR: pt_BRLayout});var keyboard;
 var currentVnode;
 
 var _onChange = function onChange(input) {
@@ -164,6 +192,47 @@ var handleShift = function handleShift() {
     layoutName: shiftToggle
   });
   showKeyboard();
+};
+
+var toggleLayout = function toggleLayout(type) {
+  var _keyboardLayouts$navi, _keyboardLayouts$navi2, _keyboardLayouts$navi3, _keyboardLayouts$navi4;
+
+  var numericLayout$1 = numericLayout,
+      pt_BR = pt_BRLayout,
+      en_US = en_USLayout;
+
+  switch (type) {
+    case 'numeric':
+      keyboard.setOptions({
+        theme: 'hg-theme-default numeric-theme',
+        layout: numericLayout$1.layout,
+        layoutCandidates: numericLayout$1.layoutCandidates
+      });
+      break;
+
+    case 'en':
+      keyboard.setOptions({
+        theme: 'hg-theme-default',
+        layout: en_US.layout,
+        layoutCandidates: en_US.layoutCandidates
+      });
+      break;
+
+    case 'pt':
+      keyboard.setOptions({
+        theme: 'hg-theme-default',
+        layout: pt_BR.layout,
+        layoutCandidates: pt_BR.layoutCandidates
+      });
+
+    default:
+      keyboard.setOptions({
+        theme: 'hg-theme-default',
+        layout: (_keyboardLayouts$navi = (_keyboardLayouts$navi2 = keyboardLayouts[navigator.language.replace('-', '_')]) === null || _keyboardLayouts$navi2 === void 0 ? void 0 : _keyboardLayouts$navi2.layout) !== null && _keyboardLayouts$navi !== void 0 ? _keyboardLayouts$navi : en_US.layout,
+        layoutCandidates: (_keyboardLayouts$navi3 = (_keyboardLayouts$navi4 = keyboardLayouts[navigator.language.replace('-', '_')]) === null || _keyboardLayouts$navi4 === void 0 ? void 0 : _keyboardLayouts$navi4.layoutCandidates) !== null && _keyboardLayouts$navi3 !== void 0 ? _keyboardLayouts$navi3 : en_US.layoutCandidates
+      });
+      break;
+  }
 };
 
 var showKeyboard = function showKeyboard() {
@@ -229,7 +298,7 @@ var jtVkDirective = {
   created: function created(el, binding, vnode) {
     var input = findInput(el);
     input.addEventListener('focus', function (event) {
-      binding.toggleLayout(binding.arg);
+      toggleLayout(binding.arg);
       currentVnode = vnode;
       showKeyboard();
       keyboard.setInput(event.target.value);
