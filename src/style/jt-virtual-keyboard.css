@@ -31,19 +31,17 @@
 }
 
 .simple-keyboard.show {
-  /*  display: block !important; */
   top: calc(100% - 230px);
 }
 
 .simple-keyboard.hide {
-  /* display: none !important; */
   top: 100%;
 }
-.simple-keyboard .hg-button-close {
+.simple-keyboard.hg-theme-default .hg-button.hg-button-close {
   flex: 0.11;
 }
 
-.simple-keyboard .hg-button-close:only-child {
+.simple-keyboard.hg-theme-default .hg-button.hg-button-close:only-child {
   flex: 1;
 }
 
