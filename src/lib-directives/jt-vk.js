@@ -106,13 +106,17 @@ const hideKeyboard = () => {
 const findInput = (el) =>
   el.tagName === 'INPUT' ? el : el.querySelector('input');
 
-const setCandidateBoxPosition = ({ clientX, clientY }) => {
+const setCandidateBoxPosition = ({ clientX, clientY, target }) => {
+  console.log(target.type)
   let keyboardPosition = document
     .querySelector('.simple-keyboard')
     .getBoundingClientRect();
   let canditateBox = document.querySelector('.hg-candidate-box');
   if (canditateBox) {
     canditateBox.style.transform = `translate(calc(${clientX}px - 50%), calc(${keyboardPosition.bottom}px - ${clientY}px - 60px))`;
+  }
+  if(target.tagName.toLowerCase() !== 'input' && !target.classList.contains('hg-button')){
+    hideKeyboard()
   }
 };
 
@@ -143,15 +147,21 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 document.addEventListener('click', setCandidateBoxPosition);
 
+
+
 const jtVkDirective = {
   created(el, binding, vnode) {
     let input = findInput(el);
     input.addEventListener('focus', (event) => {
+     binding.
       toggleLayout(binding.arg);
       currentVnode = vnode;
       showKeyboard();
       keyboard.setInput(event.target.value);
     });
+    binding.instance.$watch('$route.path',()=>{
+      hideKeyboard()
+    })
   },
 };
 
