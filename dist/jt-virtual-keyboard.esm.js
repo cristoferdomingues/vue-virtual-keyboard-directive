@@ -92,46 +92,6 @@ var components = /*#__PURE__*/Object.freeze({
   JtVirtualKeyboard: script
 });
 
-var numericLayout = {
-  layout: {
-    // default: ['1 2 3', '4 5 6', '7 8 9', '0', '_ - .', '{bksp} {enter} {close}'],
-    default: ['1 2 3', '4 5 6', '7 8 9', '{bksp} 0 {enter}', '{close}']
-  }
-};
-
-var en_USLayout = {
-  layout: {
-    default: ['` 1 2 3 4 5 6 7 8 9 0 - = {bksp}', '{tab} q w e r t y u i o p [ ] \\', "{lock} a s d f g h j k l ; ' {enter}", '{shift} z x c v b n m , . / {shift}', '.com @ {space} {close}'],
-    shift: ['~ ! @ # $ % ^ & * ( ) _ + {bksp}', '{tab} Q W E R T Y U I O P { } |', '{lock} A S D F G H J K L : " {enter}', '{shift} Z X C V B N M < > ? {shift}', '.com @ {space} {close}']
-  }
-};
-
-var pt_BRLayout = {
-  layout: {
-    default: ["' 1 2 3 4 5 6 7 8 9 0 - = {bksp}", "{tab} q w e r t y u i o p ' [", '{lock} a s d f g h j k l ç ~ ] {enter}', '{shift} \\ z x c v b n m , . ; / {shift}', '.com @ {space} {close}'],
-    shift: ['" ! @ # $ % ^ & * ( ) _ + {bksp}', '{tab} Q W E R T Y U I O P ` {', '{lock} A S D F G H J K L Ç ^ } {enter}', '{shift} | Z X C V B N M < > : ? {shift}', '.com @ {space} {close}']
-  },
-  layoutCandidates: {
-    a: 'á à ã',
-    A: 'Á À Ã',
-    e: 'é è ê ë',
-    E: 'É È Ê Ë',
-    i: 'í ì',
-    I: 'Í Ì',
-    o: 'ô ö ò ó õ',
-    O: 'Ô Ö Ò Ó Õ',
-    u: 'û ü ù ú',
-    U: 'Û Ü Ù Ú'
-  }
-}; //http://www.mhavila.com.br/link/unix/abnt2/
-
-var keyboardLayouts = /*#__PURE__*/Object.freeze({
-  __proto__: null,
-  numericLayout: numericLayout,
-  en_US: en_USLayout,
-  pt_BR: pt_BRLayout
-});
-
 let keyboard;
 let currentVnode;
 
@@ -174,49 +134,6 @@ const handleShift = () => {
   showKeyboard();
 };
 
-const toggleLayout = type => {
-  var _keyboardLayouts$navi, _keyboardLayouts$navi2;
-
-  let {
-    numericLayout,
-    pt_BR,
-    en_US
-  } = keyboardLayouts;
-
-  switch (type) {
-    case 'numeric':
-      keyboard.setOptions({
-        theme: 'hg-theme-default numeric-theme',
-        layout: numericLayout.layout,
-        layoutCandidates: numericLayout.layoutCandidates
-      });
-      break;
-
-    case 'en':
-      keyboard.setOptions({
-        theme: 'hg-theme-default',
-        layout: en_US.layout,
-        layoutCandidates: en_US.layoutCandidates
-      });
-      break;
-
-    case 'pt':
-      keyboard.setOptions({
-        theme: 'hg-theme-default',
-        layout: pt_BR.layout,
-        layoutCandidates: pt_BR.layoutCandidates
-      });
-
-    default:
-      keyboard.setOptions({
-        theme: 'hg-theme-default',
-        layout: ((_keyboardLayouts$navi = keyboardLayouts[navigator.language.replace('-', '_')]) === null || _keyboardLayouts$navi === void 0 ? void 0 : _keyboardLayouts$navi.layout) ?? en_US.layout,
-        layoutCandidates: ((_keyboardLayouts$navi2 = keyboardLayouts[navigator.language.replace('-', '_')]) === null || _keyboardLayouts$navi2 === void 0 ? void 0 : _keyboardLayouts$navi2.layoutCandidates) ?? en_US.layoutCandidates
-      });
-      break;
-  }
-};
-
 const showKeyboard = () => {
   if (!document.querySelector('body .simple-keyboard').classList.contains('show')) {
     document.querySelector('body .simple-keyboard').classList.remove('hide');
@@ -235,13 +152,19 @@ const findInput = el => el.tagName === 'INPUT' ? el : el.querySelector('input');
 
 const setCandidateBoxPosition = ({
   clientX,
-  clientY
+  clientY,
+  target
 }) => {
+  console.log(target.type);
   let keyboardPosition = document.querySelector('.simple-keyboard').getBoundingClientRect();
   let canditateBox = document.querySelector('.hg-candidate-box');
 
   if (canditateBox) {
     canditateBox.style.transform = `translate(calc(${clientX}px - 50%), calc(${keyboardPosition.bottom}px - ${clientY}px - 60px))`;
+  }
+
+  if (target.tagName.toLowerCase() !== 'input' && !target.classList.contains('hg-button')) {
+    hideKeyboard();
   }
 };
 
@@ -269,10 +192,13 @@ const jtVkDirective = {
   created(el, binding, vnode) {
     let input = findInput(el);
     input.addEventListener('focus', event => {
-      toggleLayout(binding.arg);
+      binding.toggleLayout(binding.arg);
       currentVnode = vnode;
       showKeyboard();
       keyboard.setInput(event.target.value);
+    });
+    binding.instance.$watch('$route.path', () => {
+      hideKeyboard();
     });
   }
 
