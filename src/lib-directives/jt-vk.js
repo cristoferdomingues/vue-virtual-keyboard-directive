@@ -107,7 +107,6 @@ const findInput = (el) =>
   el.tagName === 'INPUT' ? el : el.querySelector('input');
 
 const setCandidateBoxPosition = ({ clientX, clientY, target }) => {
-  console.log(target.type)
   let keyboardPosition = document
     .querySelector('.simple-keyboard')
     .getBoundingClientRect();
@@ -115,39 +114,45 @@ const setCandidateBoxPosition = ({ clientX, clientY, target }) => {
   if (canditateBox) {
     canditateBox.style.transform = `translate(calc(${clientX}px - 50%), calc(${keyboardPosition.bottom}px - ${clientY}px - 60px))`;
   }
-  if(target.tagName.toLowerCase() !== 'input' && !target.classList.contains('hg-button')){
-    hideKeyboard()
+  if (
+    target.tagName.toLowerCase() !== 'input' &&
+    !target.classList.contains('hg-button')
+  ) {
+    hideKeyboard();
   }
 };
 
-document.addEventListener('DOMContentLoaded', (event) => {
-  let simpleKeyboardDiv = document
-    .createRange()
-    .createContextualFragment(
-      `<div class="simple-keyboard jt-virtual-keyboard"></div>`
-    );
-  document.body.appendChild(simpleKeyboardDiv);
+const setup = () => {
+  if (!document.querySelector('body .simple-keyboard')) {
+    let simpleKeyboardDiv = document
+      .createRange()
+      .createContextualFragment(
+        `<div data-testid="simple-keyboard" class="simple-keyboard jt-virtual-keyboard"></div>`
+      );
+    document.body.appendChild(simpleKeyboardDiv);
 
-  keyboard = new Keyboard({
-    debug: false,
-    enableLayoutCandidates: true,
-    layoutCandidatesPageSize: 5,
-    className: 'jt-virtual-keyboard',
-    mergeDisplay: true,
-    display: {
-      '{close}': '⬇ close',
-      '{bksp}': '⌫ backspace',
-      '{enter}': '⏎ enter',
-      '{shift}': '⬆ shift',
-    },
-    onChange: (input) => onChange(input),
-    onKeyPress: (button) => onKeyPress(button),
-  });
-});
+    keyboard = new Keyboard({
+      debug: false,
+      enableLayoutCandidates: true,
+      useButtonTag:true,
+      layoutCandidatesPageSize: 5,
+      className: 'jt-virtual-keyboard',
+      mergeDisplay: true,
+      display: {
+        '{close}': '⬇ close',
+        '{bksp}': '⌫ backspace',
+        '{enter}': '⏎ enter',
+        '{shift}': '⬆ shift',
+      },
+      onChange: (input) => onChange(input),
+      onKeyPress: (button) => onKeyPress(button),
+    });
+  }
+};
+
+document.addEventListener('DOMContentLoaded', setup);
 
 document.addEventListener('click', setCandidateBoxPosition);
-
-
 
 const jtVkDirective = {
   created(el, binding, vnode) {
@@ -158,9 +163,9 @@ const jtVkDirective = {
       showKeyboard();
       keyboard.setInput(event.target.value);
     });
-    binding.instance.$watch('$route.path',()=>{
-      hideKeyboard()
-    })
+    binding.instance.$watch('$route.path', () => {
+      hideKeyboard();
+    });
   },
 };
 
