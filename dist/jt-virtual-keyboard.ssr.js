@@ -152,159 +152,158 @@ styleInject(css_248z);script.render = render;/* eslint-disable import/prefer-def
     U: 'Û Ü Ù Ú'
   }
 }; //http://www.mhavila.com.br/link/unix/abnt2/
-var keyboardLayouts=/*#__PURE__*/Object.freeze({__proto__:null,numericLayout: numericLayout,en_US: en_USLayout,pt_BR: pt_BRLayout});var keyboard;
-var currentVnode;
-
-var _onChange = function onChange(input) {
-  var _currentVnode, _currentVnode$ref, _currentVnode$ref$i;
-
-  if ((_currentVnode = currentVnode) !== null && _currentVnode !== void 0 && (_currentVnode$ref = _currentVnode.ref) !== null && _currentVnode$ref !== void 0 && (_currentVnode$ref$i = _currentVnode$ref.i) !== null && _currentVnode$ref$i !== void 0 && _currentVnode$ref$i.emit) {
-    currentVnode.ref.i.emit('update:modelValue', input);
-    return;
-  }
-
-  if (currentVnode.type.toLowerCase() === 'input' && currentVnode.props['onUpdate:modelValue']) {
-    currentVnode.props['onUpdate:modelValue'](input);
-  }
-};
-
-var _onKeyPress = function onKeyPress(button) {
-  switch (button) {
-    case '{shift}':
-    case '{lock}':
-      handleShift();
-      break;
-
-    case '{close}':
-      hideKeyboard();
-      break;
-
-    case '{enter}':
-      console.log(currentVnode);
-      break;
-  }
-};
-
-var handleShift = function handleShift() {
-  var currentLayout = keyboard.options.layoutName;
-  var shiftToggle = currentLayout === 'default' ? 'shift' : 'default';
-  keyboard.setOptions({
-    layoutName: shiftToggle
-  });
-  showKeyboard();
-};
-
-var toggleLayout = function toggleLayout(type) {
-  var _keyboardLayouts$navi, _keyboardLayouts$navi2, _keyboardLayouts$navi3, _keyboardLayouts$navi4;
-
-  var numericLayout$1 = numericLayout,
-      pt_BR = pt_BRLayout,
-      en_US = en_USLayout;
-
-  switch (type) {
-    case 'numeric':
-      keyboard.setOptions({
-        theme: 'hg-theme-default numeric-theme',
-        layout: numericLayout$1.layout,
-        layoutCandidates: numericLayout$1.layoutCandidates
+var keyboardLayouts=/*#__PURE__*/Object.freeze({__proto__:null,numericLayout: numericLayout,en_US: en_USLayout,pt_BR: pt_BRLayout});var SimpleKeyboardService = {
+  keyboard: null,
+  currentVnode: null,
+  setup: function setup() {
+    if (!document.querySelector('body .simple-keyboard')) {
+      var simpleKeyboardDiv = document.createRange().createContextualFragment("<div data-testid=\"simple-keyboard\" class=\"simple-keyboard jt-virtual-keyboard\"></div>");
+      document.body.appendChild(simpleKeyboardDiv);
+      SimpleKeyboardService.keyboard = new Keyboard__default['default']({
+        debug: false,
+        enableLayoutCandidates: true,
+        useButtonTag: true,
+        layoutCandidatesPageSize: 5,
+        className: 'jt-virtual-keyboard',
+        mergeDisplay: true,
+        display: {
+          '{close}': '⬇ close',
+          '{bksp}': '⌫ backspace',
+          '{enter}': '⏎ enter',
+          '{shift}': '⬆ shift'
+        },
+        onChange: function onChange(input) {
+          return SimpleKeyboardService.onChange(input);
+        },
+        onKeyPress: function onKeyPress(button) {
+          return SimpleKeyboardService.onKeyPress(button);
+        }
       });
-      break;
-
-    case 'en':
-      keyboard.setOptions({
-        theme: 'hg-theme-default',
-        layout: en_US.layout,
-        layoutCandidates: en_US.layoutCandidates
-      });
-      break;
-
-    case 'pt':
-      keyboard.setOptions({
-        theme: 'hg-theme-default',
-        layout: pt_BR.layout,
-        layoutCandidates: pt_BR.layoutCandidates
-      });
-
-    default:
-      keyboard.setOptions({
-        theme: 'hg-theme-default',
-        layout: (_keyboardLayouts$navi = (_keyboardLayouts$navi2 = keyboardLayouts[navigator.language.replace('-', '_')]) === null || _keyboardLayouts$navi2 === void 0 ? void 0 : _keyboardLayouts$navi2.layout) !== null && _keyboardLayouts$navi !== void 0 ? _keyboardLayouts$navi : en_US.layout,
-        layoutCandidates: (_keyboardLayouts$navi3 = (_keyboardLayouts$navi4 = keyboardLayouts[navigator.language.replace('-', '_')]) === null || _keyboardLayouts$navi4 === void 0 ? void 0 : _keyboardLayouts$navi4.layoutCandidates) !== null && _keyboardLayouts$navi3 !== void 0 ? _keyboardLayouts$navi3 : en_US.layoutCandidates
-      });
-      break;
-  }
-};
-
-var showKeyboard = function showKeyboard() {
-  if (!document.querySelector('body .simple-keyboard').classList.contains('show')) {
-    document.querySelector('body .simple-keyboard').classList.remove('hide');
-    document.querySelector('body .simple-keyboard').classList.add('show');
-  }
-};
-
-var hideKeyboard = function hideKeyboard() {
-  if (!document.querySelector('body .simple-keyboard').classList.contains('hide')) {
-    document.querySelector('body .simple-keyboard').classList.remove('show');
-    document.querySelector('body .simple-keyboard').classList.add('hide');
-  }
-};
-
-var findInput = function findInput(el) {
-  return el.tagName === 'INPUT' ? el : el.querySelector('input');
-};
-
-var setCandidateBoxPosition = function setCandidateBoxPosition(_ref) {
-  var clientX = _ref.clientX,
-      clientY = _ref.clientY,
-      target = _ref.target;
-  console.log(target.type);
-  var keyboardPosition = document.querySelector('.simple-keyboard').getBoundingClientRect();
-  var canditateBox = document.querySelector('.hg-candidate-box');
-
-  if (canditateBox) {
-    canditateBox.style.transform = "translate(calc(".concat(clientX, "px - 50%), calc(").concat(keyboardPosition.bottom, "px - ").concat(clientY, "px - 60px))");
-  }
-
-  if (target.tagName.toLowerCase() !== 'input' && !target.classList.contains('hg-button')) {
-    hideKeyboard();
-  }
-};
-
-document.addEventListener('DOMContentLoaded', function (event) {
-  var simpleKeyboardDiv = document.createRange().createContextualFragment("<div class=\"simple-keyboard jt-virtual-keyboard\"></div>");
-  document.body.appendChild(simpleKeyboardDiv);
-  keyboard = new Keyboard__default['default']({
-    debug: false,
-    enableLayoutCandidates: true,
-    layoutCandidatesPageSize: 5,
-    className: 'jt-virtual-keyboard',
-    mergeDisplay: true,
-    display: {
-      '{close}': '⬇ close',
-      '{bksp}': '⌫ backspace',
-      '{enter}': '⏎ enter',
-      '{shift}': '⬆ shift'
-    },
-    onChange: function onChange(input) {
-      return _onChange(input);
-    },
-    onKeyPress: function onKeyPress(button) {
-      return _onKeyPress(button);
     }
-  });
-});
-document.addEventListener('click', setCandidateBoxPosition);
+  },
+  setCurrentNode: function setCurrentNode(vNode) {
+    SimpleKeyboardService.currentVnode = vNode;
+  },
+  onChange: function onChange(input) {
+    var _SimpleKeyboardServic, _SimpleKeyboardServic2, _SimpleKeyboardServic3;
+
+    if ((_SimpleKeyboardServic = SimpleKeyboardService.currentVnode) !== null && _SimpleKeyboardServic !== void 0 && (_SimpleKeyboardServic2 = _SimpleKeyboardServic.ref) !== null && _SimpleKeyboardServic2 !== void 0 && (_SimpleKeyboardServic3 = _SimpleKeyboardServic2.i) !== null && _SimpleKeyboardServic3 !== void 0 && _SimpleKeyboardServic3.emit) {
+      SimpleKeyboardService.currentVnode.ref.i.emit('update:modelValue', input);
+      return;
+    }
+
+    if (SimpleKeyboardService.currentVnode.type.toLowerCase() === 'input' && SimpleKeyboardService.currentVnode.props['onUpdate:modelValue']) {
+      SimpleKeyboardService.currentVnode.props['onUpdate:modelValue'](input);
+    }
+  },
+  onKeyPress: function onKeyPress(button) {
+    switch (button) {
+      case '{shift}':
+      case '{lock}':
+        SimpleKeyboardService.handleShift();
+        break;
+
+      case '{close}':
+        SimpleKeyboardService.hideKeyboard();
+        break;
+
+      case '{enter}':
+        SimpleKeyboardService.hideKeyboard();
+        break;
+    }
+  },
+  handleShift: function handleShift() {
+    var currentLayout = SimpleKeyboardService.keyboard.options.layoutName;
+    var shiftToggle = currentLayout === 'default' ? 'shift' : 'default';
+    SimpleKeyboardService.keyboard.setOptions({
+      layoutName: shiftToggle
+    });
+    SimpleKeyboardService.showKeyboard();
+  },
+  toggleLayout: function toggleLayout(type) {
+    var _keyboardLayouts$navi, _keyboardLayouts$navi2, _keyboardLayouts$navi3, _keyboardLayouts$navi4;
+
+    var numericLayout$1 = numericLayout,
+        pt_BR = pt_BRLayout,
+        en_US = en_USLayout;
+
+    switch (type) {
+      case 'numeric':
+        SimpleKeyboardService.keyboard.setOptions({
+          theme: 'hg-theme-default numeric-theme',
+          layout: numericLayout$1.layout,
+          layoutCandidates: numericLayout$1.layoutCandidates
+        });
+        break;
+
+      case 'en':
+        SimpleKeyboardService.keyboard.setOptions({
+          theme: 'hg-theme-default',
+          layout: en_US.layout,
+          layoutCandidates: en_US.layoutCandidates
+        });
+        break;
+
+      case 'pt':
+        SimpleKeyboardService.keyboard.setOptions({
+          theme: 'hg-theme-default',
+          layout: pt_BR.layout,
+          layoutCandidates: pt_BR.layoutCandidates
+        });
+
+      default:
+        SimpleKeyboardService.keyboard.setOptions({
+          theme: 'hg-theme-default',
+          layout: (_keyboardLayouts$navi = (_keyboardLayouts$navi2 = keyboardLayouts[navigator.language.replace('-', '_')]) === null || _keyboardLayouts$navi2 === void 0 ? void 0 : _keyboardLayouts$navi2.layout) !== null && _keyboardLayouts$navi !== void 0 ? _keyboardLayouts$navi : en_US.layout,
+          layoutCandidates: (_keyboardLayouts$navi3 = (_keyboardLayouts$navi4 = keyboardLayouts[navigator.language.replace('-', '_')]) === null || _keyboardLayouts$navi4 === void 0 ? void 0 : _keyboardLayouts$navi4.layoutCandidates) !== null && _keyboardLayouts$navi3 !== void 0 ? _keyboardLayouts$navi3 : en_US.layoutCandidates
+        });
+        break;
+    }
+  },
+  showKeyboard: function showKeyboard() {
+    if (!document.querySelector('body .simple-keyboard').classList.contains('show')) {
+      document.querySelector('body .simple-keyboard').classList.remove('hide');
+      document.querySelector('body .simple-keyboard').classList.add('show');
+    }
+  },
+  hideKeyboard: function hideKeyboard() {
+    if (!document.querySelector('body .simple-keyboard').classList.contains('hide')) {
+      document.querySelector('body .simple-keyboard').classList.remove('show');
+      document.querySelector('body .simple-keyboard').classList.add('hide');
+    }
+  },
+  findInput: function findInput(el) {
+    return el.tagName === 'INPUT' ? el : el.querySelector('input');
+  },
+  setCandidateBoxPosition: function setCandidateBoxPosition(_ref) {
+    var clientX = _ref.clientX,
+        clientY = _ref.clientY,
+        target = _ref.target;
+    var keyboardPosition = document.querySelector('.simple-keyboard').getBoundingClientRect();
+    var canditateBox = document.querySelector('.hg-candidate-box');
+
+    if (canditateBox) {
+      canditateBox.style.transform = "translate(calc(".concat(clientX, "px - 50%), calc(").concat(keyboardPosition.bottom, "px - ").concat(clientY, "px - 60px))");
+    }
+
+    if (target.tagName.toLowerCase() !== 'input' && !target.classList.contains('hg-button')) {
+      SimpleKeyboardService.hideKeyboard();
+    }
+  }
+};
+var SimpleKeyboardService$1 = SimpleKeyboardService;document.addEventListener('DOMContentLoaded', SimpleKeyboardService$1.setup);
+document.addEventListener('click', SimpleKeyboardService$1.setCandidateBoxPosition);
 var jtVkDirective = {
   created: function created(el, binding, vnode) {
-    var input = findInput(el);
+    var input = SimpleKeyboardService$1.findInput(el);
     input.addEventListener('focus', function (event) {
-      toggleLayout(binding.arg);
-      currentVnode = vnode;
-      showKeyboard();
-      keyboard.setInput(event.target.value);
+      SimpleKeyboardService$1.toggleLayout(binding.arg);
+      SimpleKeyboardService$1.setCurrentNode(vnode);
+      SimpleKeyboardService$1.showKeyboard();
+      SimpleKeyboardService$1.keyboard.setInput(event.target.value);
     });
     binding.instance.$watch('$route.path', function () {
-      hideKeyboard();
+      SimpleKeyboardService$1.hideKeyboard();
     });
   }
 };
