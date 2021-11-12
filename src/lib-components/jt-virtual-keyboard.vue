@@ -100,8 +100,18 @@ export default /*#__PURE__*/ defineComponent({
   grid-template-columns: repeat(3, calc(100% / 3));
 }
 
+
 .simple-keyboard.numeric-theme .hg-button.hg-standardBtn {
   width: auto;
+  height: 60px;
+}
+.simple-keyboard.numeric-theme .hg-button.hg-functionBtn {
+  height: 60px;
+}
+.simple-keyboard.numeric-theme.show {
+  top: calc(100% - 330px) !important;
+  width: 50%;
+  right: 25%;
 }
 
 /* Small Devices */
@@ -148,4 +158,5 @@ export default /*#__PURE__*/ defineComponent({
     font-size: 15px !important;
   }
 }
+
 </style>

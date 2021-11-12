@@ -24,9 +24,10 @@ const SimpleKeyboardService = {
         layoutCandidatesPageSize: 5,
         className: 'jt-virtual-keyboard',
         mergeDisplay: true,
+        disableCaretPositioning:true,
         display: {
           '{close}': '⬇ close',
-          '{bksp}': '⌫ backspace',
+          '{bksp}': '⌫ apagar',
           '{enter}': '⏎ enter',
           '{shift}': '⬆ shift',
         },
